@@ -2,6 +2,8 @@ main, body{
     max-width: 600px;
     margin: 0 auto;
     font-size: 14px;
+    font:-apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang-SC-Regular", "STHeiti",
+        "Helvetica", "Arial", "Verdana", "sans-serif", "苹方", "宋体", "Helvetica";
 }
 
 body{
@@ -28,5 +30,5 @@ main{
 
 .buttons>button{
     margin: 0.25rem;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
 }
