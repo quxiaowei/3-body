@@ -73,13 +73,13 @@ function legend() {
     fill(color_back);
     rect(0, 400, 310, 100)
 
-    let xoffset = sim.config.frameSize.width < 600 ? 15 : 310; 
+    let xoffset = sim.config.frameSize.width < 600 ? 30 : 310; 
     let yoffset = sim.config.frameSize.width < 600 ? 520 : 420; 
 
     fill(color_back)
     rect(xoffset, yoffset-20, 80, 22)
-    rect(xoffset+80, yoffset-20, 100, 22)
-    rect(xoffset+180, yoffset-20, 50, 22)
+    rect(xoffset+50, yoffset-20, 100, 22)
+    rect(xoffset+160, yoffset-20, 50, 22)
     
     if (!sim.stop) {
         return;
@@ -100,12 +100,12 @@ function legend() {
     text(`G : ${sim.config.G}`, xoffset, yoffset);
  
     fill(color_fore2);
-    text(`Frame : ${frames}`, xoffset+80, yoffset);
+    text(`Frame : ${frames}`, xoffset+50, yoffset);
 
     if (sim.stop) {
         strokeWeight(0);
         fill(color_fore2);
-        text(sim.ended ? `Ended` : `Paused`, xoffset+180, yoffset);
+        text(sim.ended ? `Ended` : `Paused`, xoffset+160, yoffset);
     }
 
     const round = function (num) {
