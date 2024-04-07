@@ -1,0 +1,23 @@
+main, body{
+    width: 600px;
+    margin: 0 auto;
+    font-size: 14px;
+}
+
+main{
+    margin-top: 1em;
+}
+
+.infos{
+    display: flex;
+    font-size: 12px;
+    align-items: center;
+}
+
+.infos>a, .infos>img{
+    margin-right: 1em;
+}
+
+.buttons{
+    margin: 1em 0;
+}

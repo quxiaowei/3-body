@@ -4,15 +4,15 @@ let frames = 0
 
 let dark_mode = false;
 let color_fore = dark_mode ? "white" : "black";
-let color_fore2 = dark_mode ? "rgb(240,240,240)" : "rgb(180,180,180)";
-let color_line = dark_mode ? "rgba(70, 70, 70, 0.01)" : "rgba(0, 0, 0, 0.01)";
+let color_fore2 = dark_mode ? "rgb(240,240,240)" : "rgb(150,150,150)";
+let color_line = dark_mode ? "rgba(70,70,70,0.01)" : "rgba(0,0,0,0.01)";
 let color_back = dark_mode ? "rgb(50,50,50)" : "rgb(245,245,245)";
-let color_back2 = dark_mode ? "rgb(50,50,50,0.01)" : "rgba(245,245,245,0.01)";
+let color_back2 = dark_mode ? "rgb(50,50,50,0.02)" : "rgba(245,245,245,0.02)";
 
 function setup() {
     let width = sim.config.frameSize.width ? sim.config.frameSize.width : 600;
     let height = sim.config.frameSize.height ? sim.config.frameSize.height : 400;
-    height += 150;
+    height += 100;
     createCanvas(width, height);
     background(color_back);
     frameRate(60);
@@ -52,7 +52,7 @@ function draw() {
 function grid() {
     const step = 100;
     let width = sim.config.frameSize.width ? sim.config.frameSize.width : 600;
-    let height = sim.config.frameSize.height ? sim.config.frameSize.height : 500;
+    let height = sim.config.frameSize.height ? sim.config.frameSize.height : 400;
     strokeWeight(1)
     stroke(color_line)
     for (let i = step; i < width; i += step) {
@@ -66,7 +66,10 @@ function grid() {
 function legend() {
     strokeWeight(0);
     fill(color_back);
-    rect(15, 408, 600, 150)
+    rect(0, 400, 310, 100)
+    rect(310, 400, 80, 22)
+    rect(390, 400, 100, 22)
+    rect(490, 400, 50, 22)
 
     if (!sim.stop) {
         return;
@@ -77,20 +80,21 @@ function legend() {
     fill(color_fore2);
 
     y += 20;
-    text(`MASS  `, 30, y);
-    text(`Velocity  `, 80, y);
-    text(`Position  `, 190, y);
+    text(`Mass`, 30, y);
+    text(`Velocity`, 80, y);
+    text(`Position`, 190, y);
 
     strokeWeight(0);
     fill(color_fore2);
     text(`G : ${sim.config.G}`, 310, y);
-
-    text(`FRAME : ${frames}`, 390, y);
+ 
+    fill(color_fore2);
+    text(`Frame : ${frames}`, 390, y);
 
     if (sim.stop) {
         strokeWeight(0);
         fill(color_fore2);
-        text(sim.ended ? `END` : `PAUSED`, 490, y);
+        text(sim.ended ? `Ended` : `Paused`, 490, y);
     }
 
     const round = function (num) {
@@ -129,6 +133,14 @@ $(document).ready(function () {
     $("#figure8").click((e) => {
         setup();
         sim.start("figure8");
+    });
+    $("#euler").click((e) => {
+        setup();
+        sim.start("euler");
+    });
+    $("#lagrange").click((e) => {
+        setup();
+        sim.start("lagrange");
     });
     $("#toggle_pause").click((e) => {
         sim.toggle_pause();
