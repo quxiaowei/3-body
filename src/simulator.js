@@ -78,7 +78,7 @@ class simultor {
     ended = false;
 
     default = {
-        frameSize: { width: 600, height: 500.00 },
+        frameSize: { width: 600, height: 400.00 },
         range: { width: 300, height: 300 },
         initvelocityRange: 5.0,
         initMassRange: [50, 50],
@@ -108,13 +108,19 @@ class simultor {
 
     re_speed() {
         let velocity = [0, 0];
+        let position = [0, 0];
         this.bodies.forEach(e => {
             velocity[0] += e.velocityX;
             velocity[1] += e.velocityY;
+            position[0] += e.positionX - this.config.frameSize.width / 2;
+            position[1] += e.positionY - this.config.frameSize.height / 2;
         });
+        let length = this.bodies.length;
         this.bodies.forEach((e, i) => {
-            this.bodies[i].velocityX -= velocity[0] / this.bodies.length;
-            this.bodies[i].velocityY -= velocity[1] / this.bodies.length;
+            this.bodies[i].velocityX -= velocity[0] / length;
+            this.bodies[i].velocityY -= velocity[1] / length;
+            this.bodies[i].positionX -= position[0] / length;
+            this.bodies[i].positionY -= position[1] / length;
         });
     };
 

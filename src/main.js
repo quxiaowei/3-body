@@ -4,13 +4,15 @@ let frames = 0
 
 let dark_mode = false;
 let color_fore = dark_mode ? "white" : "black";
+let color_fore2 = dark_mode ? "rgb(240,240,240)" : "rgb(180,180,180)";
 let color_line = dark_mode ? "rgba(70, 70, 70, 0.01)" : "rgba(0, 0, 0, 0.01)";
 let color_back = dark_mode ? "rgb(50,50,50)" : "rgb(245,245,245)";
 let color_back2 = dark_mode ? "rgb(50,50,50,0.01)" : "rgba(245,245,245,0.01)";
 
 function setup() {
     let width = sim.config.frameSize.width ? sim.config.frameSize.width : 600;
-    let height = sim.config.frameSize.height ? sim.config.frameSize.height : 500;
+    let height = sim.config.frameSize.height ? sim.config.frameSize.height : 400;
+    height += 150;
     createCanvas(width, height);
     background(color_back);
     frameRate(60);
@@ -18,8 +20,8 @@ function setup() {
 }
 
 function draw() {
+    legend();
     if (sim.stop) {
-        legend();
         return;
     }
 
@@ -44,7 +46,7 @@ function draw() {
     });
 
     sim.timeFrame();
-    legend();
+    // legend();
 }
 
 function grid() {
@@ -64,41 +66,58 @@ function grid() {
 function legend() {
     strokeWeight(0);
     fill(color_back);
-    rect(15, 8, 100, 150)
+    rect(15, 408, 600, 150)
 
-    let y = 8;
+    if (!sim.stop) {
+        return;
+    }
+
+    let y = 400;
     strokeWeight(0);
-    fill(color_fore);
+    fill(color_fore2);
 
     y += 20;
-    text(`FRAME : ${frames}`, 15, y);
+    text(`MASS  `, 30, y);
+    text(`Velocity  `, 80, y);
+    text(`Position  `, 190, y);
 
-    y += 20;
-    text(`MASS : `, 15, y);
+    strokeWeight(0);
+    fill(color_fore2);
+    text(`G : ${sim.config.G}`, 310, y);
+
+    text(`FRAME : ${frames}`, 390, y);
+
+    if (sim.stop) {
+        strokeWeight(0);
+        fill(color_fore2);
+        text(sim.ended ? `END` : `PAUSED`, 490, y);
+    }
+
+    const round = function (num) {
+        return Math.round(num * 100) / 100
+    }
 
     sim.bodies.forEach(e => {
         y += 20;
         strokeWeight(5);
         stroke(e.color);
         point(15 + 5, y - 5);
+
         strokeWeight(0);
-        fill(color_fore);
+        fill(color_fore2);
         text(e.mass, 30, y);
+
+        // if (sim.stop) {
+        text(`( ${round(e.velocityX)}, ${round(e.velocityY)} )`, 80, y);
+        // }
+
+        text(`( ${round(e.positionX)}, ${round(e.positionY)} )`, 190, y);
+
     });
 
-    strokeWeight(0);
-    fill(color_fore);
-
-    y += 20;
-    text(`G : ${sim.config.G}`, 15, y);
-
-    y += 20;
-    if (sim.stop) {
-        strokeWeight(0);
-        fill(color_fore);
-        text(sim.ended ? `END` : `PAUSED`, 15, y);
-    }
 }
+
+legend = _.debounce(legend, 100, { 'maxWait': 100 });
 
 
 /////////////
