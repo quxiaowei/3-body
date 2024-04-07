@@ -131,7 +131,7 @@ class simultor {
     figure8() {
         let fieldRange = 250;
         let mass = 300;
-        let G = 1;
+        let G = 2;
         this.config.G = G;
         this.config.range = { width: fieldRange, height: fieldRange };
 
@@ -174,7 +174,7 @@ class simultor {
     euler_orbit(){
         let fieldRange = 200;
         let mass = 100;
-        let G = 2;
+        let G = 5;
         this.config.G = G;
         this.config.range = { width: fieldRange, height: fieldRange };
         this.bodies[0].mass = this.bodies[1].mass = this.bodies[2].mass = mass;
@@ -196,7 +196,7 @@ class simultor {
     lagrange_orbit(){
         let fieldRange = 200;
         let mass = 100;
-        let G = 2;
+        let G = 5;
         this.config.G = G;
         this.config.range = { width: fieldRange, height: fieldRange };
         this.bodies[0].mass = this.bodies[1].mass = this.bodies[2].mass = mass;
