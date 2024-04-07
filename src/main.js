@@ -8,11 +8,16 @@ let color_fore2 = dark_mode ? "rgb(240,240,240)" : "rgb(150,150,150)";
 let color_line = dark_mode ? "rgba(70,70,70,0.01)" : "rgba(0,0,0,0.01)";
 let color_back = dark_mode ? "rgb(50,50,50)" : "rgb(245,245,245)";
 let color_back2 = dark_mode ? "rgb(50,50,50,0.02)" : "rgba(245,245,245,0.02)";
+let canvas_size = []
 
 function setup() {
     let width = sim.config.frameSize.width ? sim.config.frameSize.width : 600;
     let height = sim.config.frameSize.height ? sim.config.frameSize.height : 400;
-    height += 100;
+
+    height += sim.config.frameSize.width < 600? 140 : 100;
+
+    canvas_size = [width, height];
+
     createCanvas(width, height);
     background(color_back);
     frameRate(60);
@@ -51,8 +56,8 @@ function draw() {
 
 function grid() {
     const step = 100;
-    let width = sim.config.frameSize.width ? sim.config.frameSize.width : 600;
-    let height = sim.config.frameSize.height ? sim.config.frameSize.height : 400;
+    let width = canvas_size[0];
+    let height = canvas_size[0];
     strokeWeight(1)
     stroke(color_line)
     for (let i = step; i < width; i += step) {
@@ -67,10 +72,15 @@ function legend() {
     strokeWeight(0);
     fill(color_back);
     rect(0, 400, 310, 100)
-    rect(310, 400, 80, 22)
-    rect(390, 400, 100, 22)
-    rect(490, 400, 50, 22)
 
+    let xoffset = sim.config.frameSize.width < 600 ? 15 : 310; 
+    let yoffset = sim.config.frameSize.width < 600 ? 520 : 420; 
+
+    fill(color_back)
+    rect(xoffset, yoffset-20, 80, 22)
+    rect(xoffset+80, yoffset-20, 100, 22)
+    rect(xoffset+180, yoffset-20, 50, 22)
+    
     if (!sim.stop) {
         return;
     }
@@ -84,17 +94,18 @@ function legend() {
     text(`Velocity`, 80, y);
     text(`Position`, 190, y);
 
+    
     strokeWeight(0);
     fill(color_fore2);
-    text(`G : ${sim.config.G}`, 310, y);
+    text(`G : ${sim.config.G}`, xoffset, yoffset);
  
     fill(color_fore2);
-    text(`Frame : ${frames}`, 390, y);
+    text(`Frame : ${frames}`, xoffset+80, yoffset);
 
     if (sim.stop) {
         strokeWeight(0);
         fill(color_fore2);
-        text(sim.ended ? `Ended` : `Paused`, 490, y);
+        text(sim.ended ? `Ended` : `Paused`, xoffset+180, yoffset);
     }
 
     const round = function (num) {
@@ -111,10 +122,7 @@ function legend() {
         fill(color_fore2);
         text(e.mass, 30, y);
 
-        // if (sim.stop) {
         text(`( ${round(e.velocityX)}, ${round(e.velocityY)} )`, 80, y);
-        // }
-
         text(`( ${round(e.positionX)}, ${round(e.positionY)} )`, 190, y);
 
     });

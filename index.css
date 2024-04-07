@@ -1,11 +1,15 @@
 main, body{
-    width: 600px;
+    max-width: 600px;
     margin: 0 auto;
     font-size: 14px;
 }
 
+body{
+    padding: 1rem;
+}
+
 main{
-    margin-top: 1em;
+    margin-top: 1rem;
 }
 
 .infos{
@@ -15,9 +19,14 @@ main{
 }
 
 .infos>a, .infos>img{
-    margin-right: 1em;
+    margin-right: 1rem;
 }
 
 .buttons{
-    margin: 1em 0;
+    margin: 1rem 0;
+}
+
+.buttons>button{
+    margin: 0.25rem;
+    font-size: 1.5rem;
 }

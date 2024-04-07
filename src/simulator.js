@@ -78,7 +78,7 @@ class simultor {
     ended = false;
 
     default = {
-        frameSize: { width: 600, height: 400.00 },
+        frameSize: { width: $(window).width()<600? $(window).width() - 28 : 600 , height: 400.00 },
         range: { width: 300, height: 300 },
         initvelocityRange: 5.0,
         initMassRange: [50, 50],
@@ -172,7 +172,7 @@ class simultor {
     }
 
     euler_orbit(){
-        let fieldRange = 150;
+        let fieldRange = 200;
         let mass = 100;
         let G = 1;
         this.config.G = G;
@@ -194,7 +194,7 @@ class simultor {
     }
 
     lagrange_orbit(){
-        let fieldRange = 150;
+        let fieldRange = 200;
         let mass = 100;
         let G = 1;
         this.config.G = G;
