@@ -7,8 +7,10 @@ let color_fore = dark_mode ? "white" : "black";
 let color_fore2 = dark_mode ? "rgb(240,240,240)" : "rgb(150,150,150)";
 let color_line = dark_mode ? "rgba(70,70,70,0.01)" : "rgba(0,0,0,0.01)";
 let color_back = dark_mode ? "rgb(50,50,50)" : "rgb(245,245,245)";
-let color_back2 = dark_mode ? "rgb(50,50,50,0.02)" : "rgba(245,245,245,0.02)";
+let color_back2 = dark_mode ? "rgba(50,50,50,0.02)" : "rgba(245,245,245,0.02)";
 let canvas_size = []
+let bg;
+let legend_opened = false;
 
 function setup() {
     let width = sim.config.frameSize.width ? sim.config.frameSize.width : 600;
@@ -19,9 +21,14 @@ function setup() {
     canvas_size = [width, height];
 
     createCanvas(width, height);
-    background(color_back);
+    
+    bg = createGraphics(width, height);
+    
+    bg.background(color_back);
     frameRate(60);
-    frames = 0
+    frames = 0;
+    legend_opened = false;
+
 }
 
 function draw() {
@@ -30,28 +37,30 @@ function draw() {
         return;
     }
 
+    legend_opened = false;
+    
     frames += 1
     if (frames % 60 === 0) {
-        background(color_back2);
-        // grid()
+        bg.background(color_back2);
     }
 
     sim.bodies.forEach(e => {
-        stroke('white');
-        strokeWeight(4);
-        point(e.positionX, e.positionY);
+        bg.stroke('white');
+        bg.strokeWeight(4);
+        bg.point(e.positionX, e.positionY);
 
-        stroke(e.color);
-        strokeWeight(4);
-        point(e.positionX, e.positionY);
+        bg.stroke(e.color);
+        bg.strokeWeight(4);
+        bg.point(e.positionX, e.positionY);
 
-        stroke("black");
-        strokeWeight(2);
-        point(e.positionX, e.positionY);
+        bg.stroke("black");
+        bg.strokeWeight(2);
+        bg.point(e.positionX, e.positionY);
     });
 
+    image(bg, 0, 0);
+
     sim.timeFrame();
-    // legend();
 }
 
 function grid() {
@@ -69,44 +78,41 @@ function grid() {
 }
 
 function legend() {
-    strokeWeight(0);
-    fill(color_back);
-    rect(0, 400, 310, 100)
-
-    let xoffset = sim.config.frameSize.width < 600 ? 30 : 310; 
-    let yoffset = sim.config.frameSize.width < 600 ? 520 : 420; 
-
-    fill(color_back)
-    rect(xoffset, yoffset-20, 80, 22)
-    rect(xoffset+50, yoffset-20, 100, 22)
-    rect(xoffset+160, yoffset-20, 50, 22)
-    
-    if (!sim.stop) {
+    if(!sim.stop){
+        legend_opened = false;
         return;
     }
 
-    let y = 400;
-    strokeWeight(0);
-    fill(color_fore2);
-
-    y += 20;
-    text(`Mass`, 30, y);
-    text(`Velocity`, 80, y);
-    text(`Position`, 190, y);
-
-    
-    strokeWeight(0);
-    fill(color_fore2);
-    text(`G : ${sim.config.G}`, xoffset, yoffset);
- 
-    fill(color_fore2);
-    text(`Frame : ${frames}`, xoffset+50, yoffset);
-
-    if (sim.stop) {
-        strokeWeight(0);
-        fill(color_fore2);
-        text(sim.ended ? `Ended` : `Paused`, xoffset+160, yoffset);
+    if(legend_opened){
+        return;
     }
+
+    let lo = createGraphics(canvas_size[0], canvas_size[1]);
+
+    lo.strokeWeight(0);
+    // lo.fill(color_back)
+    // lo.rect(0, 0, canvas_size[0], canvas_size[1]);
+
+    let l_color_back = dark_mode ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)";
+
+    let xoffset = sim.config.frameSize.width < 600 ? 30 : 310; 
+    let yoffset = sim.config.frameSize.width < 600 ? 110 : 20; 
+
+    lo.strokeWeight(0);
+    lo.fill(l_color_back)
+    lo.rect(0, 0, canvas_size[0], canvas_size[1]);
+    
+    let y = 20;
+    lo.strokeWeight(0);
+    lo.fill(color_fore2);
+
+    lo.text(`Mass`, 30, y);
+    lo.text(`Velocity`, 80, y);
+    lo.text(`Position`, 190, y);
+    
+    lo.text(`G : ${sim.config.G}`, xoffset, yoffset);
+    lo.text(`Frame : ${frames}`, xoffset+50, yoffset);
+    lo.text(sim.ended ? `Ended` : `Paused`, xoffset+160, yoffset);
 
     const round = function (num) {
         return Math.round(num * 100) / 100
@@ -114,22 +120,24 @@ function legend() {
 
     sim.bodies.forEach(e => {
         y += 20;
-        strokeWeight(5);
-        stroke(e.color);
-        point(15 + 5, y - 5);
+        lo.strokeWeight(5);
+        lo.stroke(e.color);
+        lo.point(15 + 5, y - 5);
 
-        strokeWeight(0);
-        fill(color_fore2);
-        text(e.mass, 30, y);
+        lo.strokeWeight(0);
+        lo.fill(color_fore2);
+        lo.text(e.mass, 30, y);
 
-        text(`( ${round(e.velocityX)}, ${round(e.velocityY)} )`, 80, y);
-        text(`( ${round(e.positionX)}, ${round(e.positionY)} )`, 190, y);
-
+        lo.text(`( ${round(e.velocityX)}, ${round(e.velocityY)} )`, 80, y);
+        lo.text(`( ${round(e.positionX)}, ${round(e.positionY)} )`, 190, y);
     });
 
+    image(lo, 0, 400);
+
+    legend_opened = true;
 }
 
-legend = _.debounce(legend, 100, { 'maxWait': 100 });
+// legend = _.debounce(legend, 100, { 'maxWait': 100 });
 
 
 /////////////
