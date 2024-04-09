@@ -49,29 +49,9 @@ class AObject {
     }
 }
 
-function react(a, b, G) {
-    let distance = Math.pow((a.positionX - b.positionX), 2)
-        + Math.pow((a.positionY - b.positionY), 2)
-
-    let delX = b.positionX - a.positionX;
-    let delY = b.positionY - a.positionY;
-
-    if (distance <= 0.01) {
-        sim && sim.end();
-        return;
-    }
-
-    let delV_a = G * b.mass / distance * deltaT
-    let delV_b = G * a.mass / distance * deltaT
-
-    a.velocityX += delV_a * delX / Math.sqrt(distance)
-    a.velocityY += delV_a * delY / Math.sqrt(distance)
-    b.velocityX -= delV_b * delX / Math.sqrt(distance)
-    b.velocityY -= delV_b * delY / Math.sqrt(distance)
-}
 
 
-class simultor {
+class Simultor {
     stop;
     config = {};
     bodies = [];
@@ -239,18 +219,41 @@ class simultor {
         }
     }
 
-    timeFrame = function () {
+    time_frame = function () {
         for (let t = 0; t < 10000; t++) {
             this.bodies.forEach(e => e.move());
 
             for (let i = 0; i < this.bodies.length - 1; i++) {
                 for (let j = i + 1; j < this.bodies.length; j++) {
-                    react(this.bodies[i], this.bodies[j], this.config.G);
+                    this.react(this.bodies[i], this.bodies[j], this.config.G);
                 }
             }
         }
     }
+
+    react = function(a, b) {
+        let G = this.config.G;
+
+        let distance = Math.pow((a.positionX - b.positionX), 2)
+            + Math.pow((a.positionY - b.positionY), 2)
+
+        let delX = b.positionX - a.positionX;
+        let delY = b.positionY - a.positionY;
+
+        if (distance <= 0.01) {
+            this.end();
+            return;
+        }
+
+        let delV_a = G * b.mass / distance * deltaT
+        let delV_b = G * a.mass / distance * deltaT
+
+        a.velocityX += delV_a * delX / Math.sqrt(distance)
+        a.velocityY += delV_a * delY / Math.sqrt(distance)
+        b.velocityX -= delV_b * delX / Math.sqrt(distance)
+        b.velocityY -= delV_b * delY / Math.sqrt(distance)
+    }
 }
 
-window.sim = new simultor();
+window.sim = new Simultor();
 sim.start();

@@ -5,18 +5,14 @@ let frames = 0
 let dark_mode = false;
 let color_fore = dark_mode ? "white" : "black";
 let color_fore2 = dark_mode ? "rgb(240,240,240)" : "rgb(150,150,150)";
-let color_line = dark_mode ? "rgba(70,70,70,0.01)" : "rgba(0,0,0,0.01)";
 let color_back = dark_mode ? "rgb(50,50,50)" : "rgb(245,245,245)";
 let color_back2 = dark_mode ? "rgba(50,50,50,0.02)" : "rgba(245,245,245,0.02)";
 let canvas_size = []
 let bg;
-let lo;
 
 function setup() {
     let width = sim.config.frameSize.width ? sim.config.frameSize.width : 600;
     let height = sim.config.frameSize.height ? sim.config.frameSize.height : 400;
-
-    // height += sim.config.frameSize.width < 600 ? 140 : 100;
 
     canvas_size = [width, height];
 
@@ -66,13 +62,14 @@ function draw() {
 
     image(bg, 0, 0);
 
-    sim.timeFrame();
+    sim.time_frame();
 }
 
 function grid() {
+    let color_line = dark_mode ? "rgba(70,70,70,0.01)" : "rgba(0,0,0,0.01)";
     const step = 100;
     let width = canvas_size[0];
-    let height = canvas_size[0];
+    let height = canvas_size[1];
     strokeWeight(1)
     stroke(color_line)
     for (let i = step; i < width; i += step) {
@@ -83,9 +80,11 @@ function grid() {
     }
 }
 
-let legend = function () {
-    lo && lo.remove && lo.remove();
-    lo = createGraphics(width, height);
+function legend () {
+    legend.buf && legend.buf.remove && legend.buf.remove();
+    legend.buf = createGraphics(width, height);
+
+    let lo = legend.buf;
     lo.strokeWeight(0);
     lo.textStyle(BOLDITALIC);
 
@@ -121,10 +120,10 @@ let legend = function () {
         lo.point(15 + 5, y - 5);
 
         lo.strokeWeight(0);
+        lo.stroke("white");
         lo.fill("white");
         lo.text(e.mass, 30, y);
 
-        lo.fill("white");
         lo.text(`( ${round(e.velocityX)}, ${round(e.velocityY)} )`, 80, y);
         lo.text(`( ${round(e.positionX)}, ${round(e.positionY)} )`, 190, y);
     });
