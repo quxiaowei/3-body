@@ -1,9 +1,5 @@
 const deltaT = 0.00001;
 
-function stop_all() {
-    sim.stop_all()
-}
-
 class AObject {
     positionX;
     positionY;
