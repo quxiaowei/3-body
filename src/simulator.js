@@ -1,5 +1,6 @@
 const deltaT = 0.00001;
 
+
 class AObject {
     positionX;
     positionY;
@@ -46,15 +47,14 @@ class AObject {
 }
 
 
-
-class Simultor {
+export class Simultor {
     stop;
     config = {};
     bodies = [];
     ended = false;
 
     default = {
-        frameSize: { width: $(window).width()<600? $(window).width() - 28 : 600 , height: 400.00 },
+        frameSize: { width: $(window).width() < 600 ? $(window).width() - 28 : 600, height: 400.00 },
         range: { width: 300, height: 300 },
         initvelocityRange: 5.0,
         initMassRange: [50, 50],
@@ -76,9 +76,9 @@ class Simultor {
 
         if (mode === "figure8") {
             this.figure8();
-        } else if(mode === "euler"){
+        } else if (mode === "euler") {
             this.euler_orbit();
-        } else if(mode === "lagrange"){
+        } else if (mode === "lagrange") {
             this.lagrange_orbit();
         } else {
             this.re_speed();
@@ -147,7 +147,7 @@ class Simultor {
         console.log(velocityX, velocityY);
     }
 
-    euler_orbit(){
+    euler_orbit() {
         let fieldRange = 200;
         let mass = 100;
         let G = 5;
@@ -156,40 +156,40 @@ class Simultor {
         this.bodies[0].mass = this.bodies[1].mass = this.bodies[2].mass = mass;
 
         this.bodies[0].positionX = this.config.frameSize.width / 2 - fieldRange / 2;
-        this.bodies[0].positionY = this.config.frameSize.height /2;
+        this.bodies[0].positionY = this.config.frameSize.height / 2;
         this.bodies[1].positionX = this.config.frameSize.width / 2;
-        this.bodies[1].positionY = this.config.frameSize.height /2;
+        this.bodies[1].positionY = this.config.frameSize.height / 2;
         this.bodies[2].positionX = this.config.frameSize.width / 2 + fieldRange / 2;
-        this.bodies[2].positionY = this.config.frameSize.height /2;
+        this.bodies[2].positionY = this.config.frameSize.height / 2;
 
         this.bodies[1].fixed = true;
         this.bodies[0].velocityX = 0;
-        this.bodies[0].velocityY = Math.sqrt(G*mass*2.5/fieldRange);
+        this.bodies[0].velocityY = Math.sqrt(G * mass * 2.5 / fieldRange);
         this.bodies[2].velocityX = 0;
-        this.bodies[2].velocityY = -Math.sqrt(G*mass*2.5/fieldRange);
+        this.bodies[2].velocityY = -Math.sqrt(G * mass * 2.5 / fieldRange);
     }
 
-    lagrange_orbit(){
+    lagrange_orbit() {
         let fieldRange = 200;
         let mass = 100;
         let G = 5;
         this.config.G = G;
         this.config.range = { width: fieldRange, height: fieldRange };
         this.bodies[0].mass = this.bodies[1].mass = this.bodies[2].mass = mass;
-        
-        this.bodies[0].positionX = this.config.frameSize.width / 2 - fieldRange / 2;
-        this.bodies[0].positionY = this.config.frameSize.height /2;
-        this.bodies[1].positionX = this.config.frameSize.width / 2 + fieldRange / 4;
-        this.bodies[1].positionY = this.config.frameSize.height /2 - fieldRange * Math.sqrt(3) / 4;
-        this.bodies[2].positionX = this.config.frameSize.width / 2 + fieldRange / 4;
-        this.bodies[2].positionY = this.config.frameSize.height /2 + fieldRange * Math.sqrt(3) / 4;
 
-        let velocity = Math.sqrt(G*mass*2/fieldRange/Math.sqrt(3));
+        this.bodies[0].positionX = this.config.frameSize.width / 2 - fieldRange / 2;
+        this.bodies[0].positionY = this.config.frameSize.height / 2;
+        this.bodies[1].positionX = this.config.frameSize.width / 2 + fieldRange / 4;
+        this.bodies[1].positionY = this.config.frameSize.height / 2 - fieldRange * Math.sqrt(3) / 4;
+        this.bodies[2].positionX = this.config.frameSize.width / 2 + fieldRange / 4;
+        this.bodies[2].positionY = this.config.frameSize.height / 2 + fieldRange * Math.sqrt(3) / 4;
+
+        let velocity = Math.sqrt(G * mass * 2 / fieldRange / Math.sqrt(3));
         this.bodies[0].velocityX = 0;
         this.bodies[0].velocityY = -velocity;
-        this.bodies[1].velocityX = velocity * Math.sqrt(3) /2;
+        this.bodies[1].velocityX = velocity * Math.sqrt(3) / 2;
         this.bodies[1].velocityY = velocity / 2;
-        this.bodies[2].velocityX = -velocity * Math.sqrt(3) /2;
+        this.bodies[2].velocityX = -velocity * Math.sqrt(3) / 2;
         this.bodies[2].velocityY = velocity / 2;
     }
 
@@ -227,7 +227,7 @@ class Simultor {
         }
     }
 
-    react = function(a, b) {
+    react = function (a, b) {
         let G = this.config.G;
 
         let distance = Math.pow((a.positionX - b.positionX), 2)
@@ -250,6 +250,3 @@ class Simultor {
         b.velocityY -= delV_b * delY / Math.sqrt(distance)
     }
 }
-
-window.sim = new Simultor();
-sim.start();

@@ -1,24 +1,28 @@
 <html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, minimum-scale=1.0, user-scalable=no">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
-    <script src="./src/p5.min.js"></script>
-    <script src="./src/simulator.js"></script>
-    <script src="./src/main.js"></script>
-    <link rel="stylesheet" href="./index.css"/>
-      
-  </head>
-  <body>
-    <main>
-    <h1>三体2D模拟</h1> 
+
+<head>
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=2.0, minimum-scale=1.0, user-scalable=no">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+  <script src="./src/p5.min.js"></script>
+  <script type="module" src="./src/simulator.js"></script>
+  <script type="module" src="./src/main.js"></script>
+  <link rel="stylesheet" href="./index.css" />
+
+</head>
+
+<body>
+  <main>
+    <h1>三体2D模拟</h1>
     <div class="infos">
-      <img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg"/>
+      <img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" />
       <a href="https://github.com/quxiaowei/3-body" target="_blank">
-        <img src="https://img.shields.io/github/stars/quxiaowei/3-body?link=https%3A%2F%2Fgithub.com%2Fquxiaowei%2F3-body"/></a> 
+        <img
+          src="https://img.shields.io/github/stars/quxiaowei/3-body?link=https%3A%2F%2Fgithub.com%2Fquxiaowei%2F3-body" /></a>
       <span>去给作者加个星吧</span>
     </div>
-    
+
     <div class="buttons">
       <button id="random" type="button">随机</button>
       <button id="figure8" type="button">8号轨道</button>
@@ -26,6 +30,7 @@
       <button id="lagrange" type="button">拉格朗日轨道</button>
       <button id="toggle_pause" type="button">暂停/继续</button>
     </div>
-    </main>
-  </body>
+  </main>
+</body>
+
 </html>

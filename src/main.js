@@ -1,4 +1,8 @@
-// import { bodies, timeFrame } from "./test";
+import { Simultor } from "./simulator.js";
+
+const sim = new Simultor();
+sim.start();
+
 const p_init = p => {
     let frames = 0
 
@@ -10,7 +14,7 @@ const p_init = p => {
     let canvas_size = []
     let bg;
 
-    p.setup = function() {
+    p.setup = function () {
         let width = sim.config.frameSize.width ? sim.config.frameSize.width : 600;
         let height = sim.config.frameSize.height ? sim.config.frameSize.height : 400;
 
@@ -29,7 +33,7 @@ const p_init = p => {
         }
     }
 
-    p.draw = function() {
+    p.draw = function () {
         if (sim.stop) {
             if (!p.legend.isOpen) {
                 p.image(p.legend(), 0, canvas_size[1] - (canvas_size[0] < 600 ? 130 : 100));
@@ -65,7 +69,7 @@ const p_init = p => {
         sim.time_frame();
     }
 
-    p.grid = function() {
+    p.grid = function () {
         let color_line = dark_mode ? "rgba(70,70,70,0.01)" : "rgba(0,0,0,0.01)";
         const step = 100;
         let width = canvas_size[0];
@@ -80,7 +84,7 @@ const p_init = p => {
         }
     }
 
-    p.legend = function() {
+    p.legend = function () {
         p.legend.buf && p.legend.buf.remove && p.legend.buf.remove();
         p.legend.buf = p.createGraphics(canvas_size[0], canvas_size[1]);
 
