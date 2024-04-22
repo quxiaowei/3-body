@@ -66,6 +66,8 @@ const p_init = p => {
 
         p.image(bg, 0, 0);
 
+        p.image(p.status_leg(), 20, 10);
+
         sim.time_frame();
     }
 
@@ -82,6 +84,19 @@ const p_init = p => {
         for (let i = step; i < height; i += step) {
             p.line(0, i, width, i);
         }
+    }
+
+    p.status_leg = function () {
+        p.status_leg.buf && p.status_leg.buf.remove && p.status_leg.buf.remove();
+        p.status_leg.buf = p.createGraphics(100, 100);
+
+        let lo = p.status_leg.buf;
+        lo.strokeWeight(0);
+        lo.textStyle(p.BOLDITALIC);
+        lo.fill(color_fore);
+
+        lo.text(sim.rewind? "回溯中 rewinding":"", 0, 20);
+        return lo;
     }
 
     p.legend = function () {
@@ -159,4 +174,7 @@ $(document).ready(function () {
     $("#toggle_pause").click((e) => {
         sim.toggle_pause();
     });
+    $("#rewind").click((e) => {
+        sim.toggle_rewind();
+    })
 });

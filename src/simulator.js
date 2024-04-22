@@ -44,6 +44,18 @@ class AObject {
         this.positionX += this.velocityX * deltaT;
         this.positionY += this.velocityY * deltaT;
     }
+
+    rewind(){
+        if (this.stop) {
+            return
+        }
+
+        if (this.fixed) {
+            return
+        }
+        this.positionX -= this.velocityX * deltaT;
+        this.positionY -= this.velocityY * deltaT;
+    }
 }
 
 
@@ -52,6 +64,7 @@ export class Simultor {
     config = {};
     bodies = [];
     ended = false;
+    rewind = false;
 
     default = {
         frameSize: { width: $(window).width() < 600 ? $(window).width() - 28 : 600, height: 400.00 },
@@ -73,6 +86,7 @@ export class Simultor {
             new AObject("Goldenrod", { config: this.config })];
         this.stop = false;
         this.ended = false;
+        this.rewind = false;
 
         if (mode === "figure8") {
             this.figure8();
@@ -215,9 +229,15 @@ export class Simultor {
         }
     }
 
+    toggle_rewind() {
+        this.rewind = this.rewind !== true;
+    }
+
     time_frame = function () {
         for (let t = 0; t < 10000; t++) {
-            this.bodies.forEach(e => e.move());
+            this.rewind ?
+                this.bodies.forEach(e => e.rewind())
+                : this.bodies.forEach(e => e.move());
 
             for (let i = 0; i < this.bodies.length - 1; i++) {
                 for (let j = i + 1; j < this.bodies.length; j++) {
@@ -244,9 +264,16 @@ export class Simultor {
         let delV_a = G * b.mass / distance * deltaT
         let delV_b = G * a.mass / distance * deltaT
 
-        a.velocityX += delV_a * delX / Math.sqrt(distance)
-        a.velocityY += delV_a * delY / Math.sqrt(distance)
-        b.velocityX -= delV_b * delX / Math.sqrt(distance)
-        b.velocityY -= delV_b * delY / Math.sqrt(distance)
+        if (this.rewind) {
+            a.velocityX -= delV_a * delX / Math.sqrt(distance)
+            a.velocityY -= delV_a * delY / Math.sqrt(distance)
+            b.velocityX += delV_b * delX / Math.sqrt(distance)
+            b.velocityY += delV_b * delY / Math.sqrt(distance)
+        }else{
+            a.velocityX += delV_a * delX / Math.sqrt(distance)
+            a.velocityY += delV_a * delY / Math.sqrt(distance)
+            b.velocityX -= delV_b * delX / Math.sqrt(distance)
+            b.velocityY -= delV_b * delY / Math.sqrt(distance)
+        }
     }
 }
